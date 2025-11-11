@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public class VendaResponse {
-    
+
     private Long id;
     private LocalDateTime dataHora;
     private String nomeUsuarioResponsavel;

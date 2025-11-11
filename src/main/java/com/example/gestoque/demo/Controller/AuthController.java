@@ -2,6 +2,8 @@ package com.example.gestoque.demo.Controller;
 
 import com.example.gestoque.demo.DTOs.Login.LoginRequest;
 import com.example.gestoque.demo.DTOs.Login.LoginResponse;
+import com.example.gestoque.demo.DTOs.Requests.UsuarioRequest;
+import com.example.gestoque.demo.DTOs.Response.UsuarioResponse;
 import com.example.gestoque.demo.Service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,16 @@ public class AuthController {
         } else {
 
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+    }
+
+    @PostMapping("/login/criar")
+    public ResponseEntity<?> cadastrarUsuario(@RequestBody UsuarioRequest request) {
+        try {
+            UsuarioResponse response = authService.criarUsuario(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
