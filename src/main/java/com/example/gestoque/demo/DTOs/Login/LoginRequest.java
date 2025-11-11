@@ -1,4 +1,4 @@
-package com.example.gestoque.demo.DTOs;
+package com.example.gestoque.demo.DTOs.Login;
 
 public class LoginRequest {
 

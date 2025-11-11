@@ -1,7 +1,7 @@
 package com.example.gestoque.demo.Controller;
 
-import com.example.gestoque.demo.DTOs.LoginRequest;
-import com.example.gestoque.demo.DTOs.LoginResponse;
+import com.example.gestoque.demo.DTOs.Login.LoginRequest;
+import com.example.gestoque.demo.DTOs.Login.LoginResponse;
 import com.example.gestoque.demo.Service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
