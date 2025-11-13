@@ -19,21 +19,23 @@ public class Usuario {
     @Column(nullable = false)
     private String senha; // Senha (armazenada criptografada)
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String perfil; // Perfil: ADMIN OU OPERADOR
+    private Perfil perfil; // Perfil: ADMIN OU OPERADOR
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean ativo = true; // Status: ativo/inativo
+    private StatusUsuario status; // Status: ativo/inativo
 
     // Construtores
     public Usuario() {}
 
-    public Usuario(String nomeCompleto, String email, String senha, String perfil, boolean ativo) {
+    public Usuario(String nomeCompleto, String email, String senha, Perfil perfil, StatusUsuario status) {
         this.nomeCompleto = nomeCompleto;
         this.email = email;
         this.senha = senha;
         this.perfil = perfil;
-        this.ativo = ativo;
+        this.status = status;
     }
 
     // Getters e Setters
@@ -69,19 +71,25 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public String getPerfil() {
+    public Perfil getPerfil() {
         return perfil;
     }
 
-    public void setPerfil(String perfil) {
+    public void setPerfil(Perfil perfil) {
         this.perfil = perfil;
     }
 
-    public boolean isAtivo() {
-        return ativo;
+    public StatusUsuario getStatus() {
+        return status;
     }
 
-    public void setAtivo(boolean ativo) {
-        this.ativo = ativo;
+    public void setStatus(StatusUsuario status){
+        this.status = status;
+    }
+
+
+    @Transient
+    public boolean isAtivo() {
+        return this.status == StatusUsuario.ATIVO;
     }
 }
