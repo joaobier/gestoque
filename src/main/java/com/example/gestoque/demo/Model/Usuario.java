@@ -11,23 +11,21 @@ public class Usuario {
     private Long id;
 
     @Column(nullable = false)
-    private String nomeCompleto; // Nome completo
+    private String nomeCompleto;
 
     @Column(unique = true, nullable = false)
-    private String email; // E-mail (único)
+    private String email;
 
     @Column(nullable = false)
-    private String senha; // Senha (armazenada criptografada)
+    private String senha;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Perfil perfil;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Perfil perfil; // Perfil: ADMIN OU OPERADOR
+    private StatusUsuario status;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusUsuario status; // Status: ativo/inativo
-
-    // Construtores
     public Usuario() {}
 
     public Usuario(String nomeCompleto, String email, String senha, Perfil perfil, StatusUsuario status) {
@@ -38,7 +36,6 @@ public class Usuario {
         this.status = status;
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }
