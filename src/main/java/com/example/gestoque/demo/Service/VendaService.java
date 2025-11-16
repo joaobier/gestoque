@@ -66,8 +66,7 @@ public class VendaService {
     @Transactional
     public VendaResponse registrarVenda(VendaRequest request) {
 
-        Usuario usuario = usuarioService.buscarPorEmail(request.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + request.getUsuarioResponsavelId()));
+        Usuario usuario = usuarioService.buscarEntidadePorId(request.getUsuarioResponsavelId());
 
         Venda novaVenda = new Venda();
         novaVenda.setUsuarioResponsavel(usuario);
@@ -95,7 +94,6 @@ public class VendaService {
             itemVenda.setProduto(produto);
             itemVenda.setQuantidade(quantidadeVendida);
             itemVenda.setPrecoUnitarioVenda(produto.getPrecoUnitario());
-
             BigDecimal subtotal = produto.getPrecoUnitario().multiply(new BigDecimal(quantidadeVendida));
             itemVenda.setSubtotal(subtotal);
             itemVenda.setVenda(novaVenda);

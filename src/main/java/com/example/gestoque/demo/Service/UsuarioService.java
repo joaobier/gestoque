@@ -46,6 +46,11 @@ public class UsuarioService {
         return toResponseDTO(usuario);
     }
 
+    public Usuario buscarEntidadePorId(Long id) {
+        return usuarioRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado com ID: " + id));
+    }
+
     public Optional<Usuario> buscarPorEmail(String email) {
         return usuarioRepository.findByEmail(email);
     }
