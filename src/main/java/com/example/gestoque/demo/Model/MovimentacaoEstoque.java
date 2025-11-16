@@ -4,33 +4,35 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "movimentacoesestoque")
+@Table(name = "movimentacoes_estoque")
 public class MovimentacaoEstoque {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //Relação com Produto(varias movimentações podem se relacionar com um produto)
     @ManyToOne
-    @JoinColumn(name = "produtoid", nullable = false)
+    @JoinColumn(name = "produto_id", nullable = false)
     private Produto produto;
 
     @Column(nullable = false)
-    private LocalDateTime dataHora; // data e hora
+    private LocalDateTime dataHora;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private TipoMovimentacao tipo;
 
     @Column(nullable = false)
-    private String tipo; // Tipo: ENTRADA, SAIDA
+    private Integer quantidade;
 
-    @Column(nullable = false)
-    private Integer quantidade; // Quantidade de itens movimentados
+    @Column
+    private String motivo;
 
-    // Construtores
     public MovimentacaoEstoque() {
         this.dataHora = LocalDateTime.now();
     }
 
-    public MovimentacaoEstoque(Long id, Produto produto, LocalDateTime dataHora, String tipo, Integer quantidade) {
+    public MovimentacaoEstoque(Long id, Produto produto, LocalDateTime dataHora, TipoMovimentacao tipo, Integer quantidade) {
         this.id = id;
         this.produto = produto;
         this.dataHora = dataHora;
@@ -38,7 +40,6 @@ public class MovimentacaoEstoque {
         this.quantidade = quantidade;
     }
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -63,11 +64,11 @@ public class MovimentacaoEstoque {
         this.dataHora = dataHora;
     }
 
-    public String getTipo() {
+    public TipoMovimentacao getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoMovimentacao tipo) {
         this.tipo = tipo;
     }
 
@@ -77,5 +78,13 @@ public class MovimentacaoEstoque {
 
     public void setQuantidade(Integer quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public String getMotivo() {
+        return motivo;
+    }
+
+    public void setMotivo(String motivo) {
+        this.motivo = motivo;
     }
 }
