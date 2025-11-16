@@ -17,6 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import com.example.gestoque.demo.DTOs.Response.RelatorioVendasResponse;
+import com.example.gestoque.demo.Model.Usuario;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class VendaService {
@@ -53,6 +62,45 @@ public class VendaService {
                 venda.getValorRecebido(),
                 venda.getTroco()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public RelatorioVendasResponse gerarRelatorioVendas(LocalDate dataInicio, LocalDate dataFim, Long usuarioId, BigDecimal valorMin, BigDecimal valorMax) {
+
+        Specification<Venda> spec = (root, query, criteriaBuilder) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (dataInicio != null && dataFim != null) {
+                predicates.add(criteriaBuilder.between(root.get("dataHora"), dataInicio.atStartOfDay(), dataFim.atTime(LocalTime.MAX)));
+            } else if (dataInicio != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("dataHora"), dataInicio.atStartOfDay()));
+            } else if (dataFim != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("dataHora"), dataFim.atTime(LocalTime.MAX)));
+            }
+
+            if (valorMin != null && valorMax != null) {
+                predicates.add(criteriaBuilder.between(root.get("valorTotal"), valorMin, valorMax));
+            } else if (valorMin != null) {
+                predicates.add(criteriaBuilder.greaterThanOrEqualTo(root.get("valorTotal"), valorMin));
+            } else if (valorMax != null) {
+                predicates.add(criteriaBuilder.lessThanOrEqualTo(root.get("valorTotal"), valorMax));
+            }
+
+            if (usuarioId != null) {
+                predicates.add(criteriaBuilder.equal(root.get("usuarioResponsavel").get("id"), usuarioId));
+            }
+
+            return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
+        };
+
+        List<Venda> vendasFiltradas = vendaRepository.findAll(spec);
+
+        List<VendaResponse> vendasDTO = vendasFiltradas.stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+
+        return new RelatorioVendasResponse(vendasDTO);
     }
 
     public List<Venda> listarTodos() {
