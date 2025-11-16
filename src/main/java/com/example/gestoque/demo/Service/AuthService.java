@@ -10,6 +10,10 @@ import com.example.gestoque.demo.Model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Optional;
+import com.example.gestoque.demo.Model.Usuario;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 @Service
 public class AuthService {
@@ -43,38 +47,6 @@ public class AuthService {
     }
 
     public UsuarioResponse criarUsuario(UsuarioRequest request) {
-        Usuario novoUsuario = new Usuario();
-        novoUsuario.setNomeCompleto(request.getNomeCompleto());
-        novoUsuario.setEmail(request.getEmail());
-        novoUsuario.setSenha(request.getSenha());
-
-        try {
-            Perfil perfil = Perfil.valueOf(request.getPerfil().toUpperCase());
-            novoUsuario.setPerfil(perfil);
-        } catch (Exception e){
-            novoUsuario.setPerfil(Perfil.OPERADOR);
-        }
-
-        if (request.getAtivo() != null && !request.getAtivo()){
-            novoUsuario.setStatus(StatusUsuario.INATIVO);
-        } else {
-            novoUsuario.setStatus(StatusUsuario.ATIVO);
-        }
-
-        Usuario usuarioSalvo;
-        try {
-            usuarioSalvo = usuarioService.salvar(novoUsuario);
-        } catch (IllegalArgumentException e) {
-            // Repassa a exceção de regra de negócio (ex: e-mail já existe)
-            throw new IllegalArgumentException(e.getMessage());
-        }
-
-        return new UsuarioResponse(
-                usuarioSalvo.getId(),
-                usuarioSalvo.getNomeCompleto(),
-                usuarioSalvo.getEmail(),
-                usuarioSalvo.getPerfil().name(),
-                usuarioSalvo.isAtivo()
-        );
+        return usuarioService.criarUsuario(request);
     }
 }
