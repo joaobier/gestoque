@@ -111,6 +111,20 @@ public class VendaService {
         return vendaRepository.findByUsuarioResponsavelId(usuarioId);
     }
 
+    public List<VendaResponse> listarVendas(LocalDateTime dataInicio, LocalDateTime dataFim) {
+        List<Venda> vendas;
+
+        if (dataInicio != null && dataFim != null) {
+            vendas = vendaRepository.findByDataHoraBetween(dataInicio, dataFim);
+        } else {
+            vendas = vendaRepository.findAll();
+        }
+
+        return vendas.stream()
+                .map(this::toResponseDTO)
+                .collect(Collectors.toList());
+    }
+
     @Transactional
     public VendaResponse registrarVenda(VendaRequest request) {
 
